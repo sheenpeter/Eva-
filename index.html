@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8" />
+  <title>Forest Run – Kids Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ഗേൾ ക്യാരക്ടർ സെലക്ഷൻ -->
+  <div id="character-select">
+    <h2>നിന്റെ **ഹീറോ**യെ തിരഞ്ഞെടുക്കൂ</h2>
+    <div class="girls">
+      <button class="girl-btn" data-girl="1">Girl 1</button>
+      <button class="girl-btn" data-girl="2">Girl 2</button>
+      <button class="girl-btn" data-girl="3">Girl 3</button>
+    </div>
+    <button id="start-btn">ഗെയിം സ്റ്റാർട്ട്</button>
+  </div>
+
+  <!-- ഗെയിം ഏരിയ -->
+  <div id="game-wrapper">
+    <canvas id="gameCanvas" width="900" height="500"></canvas>
+    <div id="ui">
+      <div>Level: <span id="level">1</span> / 3</div>
+      <div>Stars: <span id="score">0</span></div>
+      <div>Lives: <span id="lives">3</span></div>
+      <button id="restart-btn">Restart</button>
+    </div>
+  </div>
+
+  <!-- ലെവൽ മെസ്സേജുകൾ -->
+  <div id="message-box" class="hidden">
+    <h2 id="message-title"></h2>
+    <p id="message-text"></p>
+    <button id="next-level-btn">Next</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
