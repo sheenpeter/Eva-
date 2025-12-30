@@ -2,7 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans Malayalam", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Noto Sans Malayalam", sans-serif;
 }
 
 body {
@@ -10,24 +11,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(#74c0ff, #d0f4ff);
+  background: radial-gradient(circle at top, #85617a 0, #4d344f 60%, #2f1f34 100%);
 }
 
-/* നേച്ചർ – റിയലിസ്റ്റിക് ഫീലുള്ള ബാക്ക്ഗ്രൗണ്ട് */
+/* Game frame */
 #game-wrapper {
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* കാന்வാസ് full area */
+/* Canvas background (sky) */
 #gameCanvas {
   display: block;
   background: linear-gradient(#7cc6ff, #bdf0ff);
 }
 
-/* മുൻപിലെ UI */
+/* HUD */
 #ui {
   position: absolute;
   top: 10px;
@@ -38,7 +39,7 @@ body {
   align-items: center;
   color: #fff;
   font-weight: 600;
-  text-shadow: 0 0 4px rgba(0,0,0,0.8);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
 #ui button {
@@ -46,11 +47,11 @@ body {
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   color: #fff;
 }
 
-/* ക്യാരക്ടർ സെലക്ഷൻ */
+/* Character select overlay */
 #character-select {
   position: fixed;
   inset: 0;
@@ -59,7 +60,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   z-index: 10;
 }
 
@@ -76,10 +77,10 @@ body {
   width: 90px;
   height: 130px;
   border-radius: 16px;
-  border: 3px solid #fff;
+  border: 3px solid rgba(255, 255, 255, 0.7);
   background: linear-gradient(#ffe9f7, #ffc0df);
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
   font-weight: 600;
 }
 
@@ -88,27 +89,26 @@ body {
 }
 
 #start-btn {
-  padding: 10px 20px;
+  padding: 10px 24px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: #ff69b4;
+  background: #c2255c;
   color: white;
   font-size: 16px;
 }
 
-/* മെസ്സേജ് ബോക്സ് (ലെവൽ ഫിനിഷ് മുതലായവ) */
+/* Message box */
 #message-box {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 15;
 }
 
-#message-box > div,
 #message-box-inner {
   background: #ffffff;
   padding: 24px 30px;
