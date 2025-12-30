@@ -1,3 +1,4 @@
+// Canvas & UI
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -6,15 +7,18 @@ const scoreSpan = document.getElementById("score");
 const livesSpan = document.getElementById("lives");
 const restartBtn = document.getElementById("restart-btn");
 
+// Character select
 const charSelect = document.getElementById("character-select");
 const girlButtons = document.querySelectorAll(".girl-btn");
 const startBtn = document.getElementById("start-btn");
 
+// Message box
 const messageBox = document.getElementById("message-box");
 const msgTitle = document.getElementById("message-title");
 const msgText = document.getElementById("message-text");
 const nextLevelBtn = document.getElementById("next-level-btn");
 
+// Game state
 let selectedGirl = 1;
 let keys = {};
 let gameRunning = false;
@@ -24,7 +28,7 @@ let maxLevel = 3;
 let score = 0;
 let lives = 3;
 
-// പ്ലെയർ – always girl
+// Player (always girl)
 const player = {
   x: 80,
   y: 0,
@@ -35,9 +39,9 @@ const player = {
   color: "#ff99cc"
 };
 
-// പ്ലാറ്റ്ഫോമുകളും ഒബ്സ്റ്റക്കളുകളും, ഓരോ ലെവലിലും different
+// Levels: platforms, spikes, stars, goal
 const levels = [
-  [], // dummy index 0
+  [],
   {
     platforms: [
       { x: 0, y: 430, w: 900, h: 70 },
@@ -103,27 +107,29 @@ const levels = [
   }
 ];
 
-// കീബോർഡ് കൺട്രോൾ – left/right + jump (space / up)
+// Keyboard
 window.addEventListener("keydown", e => {
   keys[e.key] = true;
 });
+
 window.addEventListener("keyup", e => {
   keys[e.key] = false;
 });
 
-// ഗേൾ സെലക്ഷൻ
+// Girl selection
 girlButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     girlButtons.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
     selectedGirl = parseInt(btn.dataset.girl, 10);
-    // different dress color
+
     if (selectedGirl === 1) player.color = "#ff99cc";
     if (selectedGirl === 2) player.color = "#ffdd55";
     if (selectedGirl === 3) player.color = "#9b8cff";
   });
 });
 
+// Start button – THIS is what was failing before
 startBtn.addEventListener("click", () => {
   charSelect.classList.add("hidden");
   resetGame();
@@ -131,11 +137,12 @@ startBtn.addEventListener("click", () => {
   loop();
 });
 
+// Restart
 restartBtn.addEventListener("click", () => {
   resetGame();
 });
 
-// ലെവൽ, സ്കോർ reset
+// Game helpers
 function resetGame() {
   level = 1;
   score = 0;
@@ -153,7 +160,7 @@ function resetPlayer() {
 }
 
 function resetStars() {
-  levels.forEach((lv, i) => {
+  levels.forEach(lv => {
     if (!lv || !lv.stars) return;
     lv.stars.forEach(s => (s.collected = false));
   });
@@ -165,60 +172,56 @@ function updateUI() {
   livesSpan.textContent = lives;
 }
 
-// മെസ്സേജ് show
 function showMessage(title, text, cb) {
   msgTitle.textContent = title;
   msgText.textContent = text;
   messageBox.classList.remove("hidden");
+
   const handler = () => {
     messageBox.classList.add("hidden");
     nextLevelBtn.removeEventListener("click", handler);
     if (cb) cb();
   };
+
   nextLevelBtn.addEventListener("click", handler);
 }
 
-// ഡിഫിക്കൾറ്റി സിമ്പിൾ, 7 വയസ്സ് mind
+// Physics (easy for kids)
 const GRAVITY = 0.7;
-const MOVE_SPEED = 3.0;
+const MOVE_SPEED = 3;
 const JUMP_FORCE = 13;
 
-// മെയിൻ ഗെയിം loop
+// Main loop
 function loop() {
   if (!gameRunning) return;
-
   update();
   draw();
-
   requestAnimationFrame(loop);
 }
 
 function update() {
   const current = levels[level];
 
-  // horizontal move
-  if (keys["ArrowLeft"] || keys["a"]) {
-    player.x -= MOVE_SPEED;
-  }
-  if (keys["ArrowRight"] || keys["d"]) {
-    player.x += MOVE_SPEED;
-  }
+  // Horizontal move
+  if (keys["ArrowLeft"] || keys["a"]) player.x -= MOVE_SPEED;
+  if (keys["ArrowRight"] || keys["d"]) player.x += MOVE_SPEED;
 
-  // jump
+  // Jump
   if ((keys[" "] || keys["ArrowUp"]) && player.onGround) {
     player.vy = -JUMP_FORCE;
     player.onGround = false;
   }
 
-  // gravity
+  // Gravity
   player.vy += GRAVITY;
   player.y += player.vy;
 
-  // simple world bounds
+  // Bounds
   if (player.x < 0) player.x = 0;
-  if (player.x + player.w > canvas.width) player.x = canvas.width - player.w;
+  if (player.x + player.w > canvas.width)
+    player.x = canvas.width - player.w;
 
-  // platform collision
+  // Platforms
   player.onGround = false;
   current.platforms.forEach(p => {
     if (
@@ -234,7 +237,7 @@ function update() {
     }
   });
 
-  // spikes (obstacles)
+  // Spikes
   current.spikes.forEach(s => {
     if (
       player.x < s.x + s.w &&
@@ -245,7 +248,7 @@ function update() {
     }
   });
 
-  // stars collect
+  // Stars
   current.stars.forEach(s => {
     if (s.collected) return;
     const dx = player.x + player.w / 2 - s.x;
@@ -258,7 +261,7 @@ function update() {
     }
   });
 
-  // goal – next level
+  // Goal
   const g = current.goal;
   if (
     player.x < g.x + g.w &&
@@ -269,17 +272,13 @@ function update() {
     if (level < maxLevel) {
       const next = level + 1;
       gameRunning = false;
-      showMessage(
-        "Level " + level + " Complete!",
-        "നന്നായി! ഇനി അടുത്ത ലെവലിലേക്ക് പോകാം.",
-        () => {
-          level = next;
-          resetPlayer();
-          updateUI();
-          gameRunning = true;
-          loop();
-        }
-      );
+      showMessage("Level " + level + " Complete!", "നന്നായി! അടുത്ത ലെവൽ.", () => {
+        level = next;
+        resetPlayer();
+        updateUI();
+        gameRunning = true;
+        loop();
+      });
     } else {
       gameRunning = false;
       showMessage(
@@ -294,7 +293,7 @@ function update() {
     }
   }
 
-  // fell down
+  // Fell
   if (player.y > canvas.height + 100) {
     handleHit();
   }
@@ -305,26 +304,21 @@ function handleHit() {
   updateUI();
   if (lives <= 0) {
     gameRunning = false;
-    showMessage(
-      "Game Over",
-      "ഒന്നുകൂടി ശ്രമിക്കാമോ?",
-      () => {
-        resetGame();
-        gameRunning = true;
-        loop();
-      }
-    );
+    showMessage("Game Over", "ഒന്നുകൂടി ശ്രമിക്കാമോ?", () => {
+      resetGame();
+      gameRunning = true;
+      loop();
+    });
   } else {
     resetPlayer();
   }
 }
 
-// drawing – nature, platforms, girl, obstacles
+// Drawing
 function draw() {
-  // sky gradient already in CSS; here draw extra nature elements
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // far mountains
+  // Mountains
   ctx.fillStyle = "#9ad0ff";
   ctx.beginPath();
   ctx.moveTo(0, 320);
@@ -339,18 +333,16 @@ function draw() {
   ctx.closePath();
   ctx.fill();
 
-  // forest ground
+  // Ground
   ctx.fillStyle = "#5ba94f";
   ctx.fillRect(0, 380, 900, 120);
 
-  // some simple trees
-  for (let i = 50; i < 900; i += 180) {
-    drawTree(i, 340);
-  }
+  // Trees
+  for (let i = 50; i < 900; i += 180) drawTree(i, 340);
 
   const current = levels[level];
 
-  // platforms
+  // Platforms
   current.platforms.forEach(p => {
     ctx.fillStyle = "#4c8c3f";
     ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -358,17 +350,15 @@ function draw() {
     ctx.fillRect(p.x, p.y + p.h - 6, p.w, 6);
   });
 
-  // spikes
-  current.spikes.forEach(s => {
-    drawSpikes(s.x, s.y, s.w, s.h);
-  });
+  // Spikes
+  current.spikes.forEach(s => drawSpikes(s.x, s.y, s.w, s.h));
 
-  // stars
+  // Stars
   current.stars.forEach(s => {
     if (!s.collected) drawStar(s.x, s.y, s.r, "#ffe066");
   });
 
-  // goal – glowing flower gate
+  // Goal
   const g = current.goal;
   ctx.fillStyle = "#ffe066";
   ctx.beginPath();
@@ -378,7 +368,7 @@ function draw() {
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // player (girl)
+  // Girl
   drawGirl(player.x, player.y, player.w, player.h, player.color);
 }
 
@@ -411,14 +401,12 @@ function drawStar(cx, cy, r, color) {
   ctx.fillStyle = color;
   ctx.beginPath();
   const spikes = 5;
-  let rot = Math.PI / 2 * 3;
-  let x = 0;
-  let y = 0;
+  let rot = (Math.PI / 2) * 3;
   const step = Math.PI / spikes;
 
   for (let i = 0; i < spikes; i++) {
-    x = Math.cos(rot) * r;
-    y = Math.sin(rot) * r;
+    let x = Math.cos(rot) * r;
+    let y = Math.sin(rot) * r;
     ctx.lineTo(x, y);
     rot += step;
 
@@ -449,7 +437,7 @@ function drawGirl(x, y, w, h, color) {
   ctx.arc(x + w / 2, y + h * 0.2, w * 0.38, Math.PI * 0.1, Math.PI * 0.9);
   ctx.fill();
 
-  // simple feet
+  // feet
   ctx.fillStyle = "#343a40";
   ctx.fillRect(x + 4, y + h - 6, w / 2 - 4, 6);
   ctx.fillRect(x + w / 2, y + h - 6, w / 2 - 4, 6);
