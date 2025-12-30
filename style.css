@@ -1,0 +1,136 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans Malayalam", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(#74c0ff, #d0f4ff);
+}
+
+/* നേച്ചർ – റിയലിസ്റ്റിക് ഫീലുള്ള ബാക്ക്ഗ്രൗണ്ട് */
+#game-wrapper {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* കാന்வാസ് full area */
+#gameCanvas {
+  display: block;
+  background: linear-gradient(#7cc6ff, #bdf0ff);
+}
+
+/* മുൻപിലെ UI */
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0,0,0,0.8);
+}
+
+#ui button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+}
+
+/* ക്യാരക്ടർ സെലക്ഷൻ */
+#character-select {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #ffe6f3 0, #ffd1ea 40%, #f4b8ff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 10;
+}
+
+#character-select h2 {
+  font-size: 28px;
+}
+
+.girls {
+  display: flex;
+  gap: 16px;
+}
+
+.girl-btn {
+  width: 90px;
+  height: 130px;
+  border-radius: 16px;
+  border: 3px solid #fff;
+  background: linear-gradient(#ffe9f7, #ffc0df);
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+.girl-btn.selected {
+  outline: 4px solid #ff69b4;
+}
+
+#start-btn {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #ff69b4;
+  color: white;
+  font-size: 16px;
+}
+
+/* മെസ്സേജ് ബോക്സ് (ലെവൽ ഫിനിഷ് മുതലായവ) */
+#message-box {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+}
+
+#message-box > div,
+#message-box-inner {
+  background: #ffffff;
+  padding: 24px 30px;
+  border-radius: 16px;
+  max-width: 320px;
+  text-align: center;
+}
+
+#message-title {
+  margin-bottom: 10px;
+}
+
+#message-box button {
+  margin-top: 12px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #4dabf7;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
+}
